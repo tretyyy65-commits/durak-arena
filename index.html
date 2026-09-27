@@ -1,81 +1,171 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Durak Arena</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Durak Arena</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <main id="app">
+<main id="app">
 
+    <!-- ВЕРХНЯ ПАНЕЛЬ -->
     <header class="top-bar">
-      <div class="profile">
-        <div class="avatar">🦊</div>
-        <div>
-          <b>Фокс</b>
-          <small>#QR12657R</small>
-        </div>
-      </div>
 
-      <div class="currency">
-        <span>🪙 417 666</span>
-        <span>💎 850</span>
-      </div>
+        <div class="profile">
+            <div class="avatar">🦊</div>
+
+            <div class="profile-info">
+                <strong>Фокс</strong>
+                <small>#QR12657R</small>
+            </div>
+
+            <div class="league">
+                <span>🏆</span>
+                <div>
+                    <b>ПРОФІ</b>
+                    <small>1250 / 2000</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="currency">
+            <div>
+                🪙 <b>417 666</b>
+                <button>+</button>
+            </div>
+
+            <div>
+                💎 <b>850</b>
+                <button>+</button>
+            </div>
+        </div>
+
     </header>
 
+
+    <!-- ЦЕНТР -->
     <section class="hero">
 
-      <div class="logo">
-        <div class="cards">♠ ♥ ♣ ♦</div>
-        <h1>DURAK</h1>
-        <h2>ARENA</h2>
-      </div>
+        <div class="game-logo">
 
-      <button class="play-button" id="playButton">
-        ГРАТИ
-      </button>
+            <div class="logo-cards">
+                ♠ ♥ ♣ ♦
+            </div>
+
+            <h1>DURAK</h1>
+            <h2>ARENA</h2>
+
+            <div class="logo-crown">♛</div>
+
+        </div>
+
+
+        <button class="play-button" id="playButton">
+            <span>♠</span>
+            ГРАТИ
+            <span>♦</span>
+        </button>
 
     </section>
 
-    <section class="quick-menu">
-      <button>🎁<span>Подарунки</span></button>
-      <button>📋<span>Завдання</span></button>
-      <button>⚙️<span>Налаштування</span></button>
-      <button>🛒<span>Магазин</span></button>
-      <button>👥<span>Клан</span></button>
-      <button>🏅<span>Медалі</span></button>
-    </section>
 
+    <!-- ЛІВЕ МЕНЮ -->
+    <aside class="side-menu">
+
+        <button id="shopButton">
+            <span>🧰</span>
+            <b>МАГАЗИН</b>
+        </button>
+
+        <button id="clanButton">
+            <span>👑</span>
+            <b>КЛАН</b>
+        </button>
+
+        <button id="medalsButton">
+            <span>🏅</span>
+            <b>МЕДАЛІ</b>
+        </button>
+
+    </aside>
+
+
+    <!-- ПРАВЕ МЕНЮ -->
+    <aside class="right-menu">
+
+        <button id="giftButton">
+            <span>🎁</span>
+            <b>ПОДАРУНКИ</b>
+        </button>
+
+        <button id="settingsButton">
+            <span>⚙️</span>
+            <b>НАЛАШТУВАННЯ</b>
+        </button>
+
+    </aside>
+
+
+    <!-- СТАТИСТИКА -->
     <section class="stats">
-      <div>
-        <b>1250</b>
-        <span>🏆 Рейтинг</span>
-      </div>
 
-      <div>
-        <b>Сезон №4</b>
-        <span>👑 Профі</span>
-      </div>
+        <button id="ratingButton" class="stat-card">
+            <span class="stat-title">РЕЙТИНГ</span>
+            <strong>🏆 1250</strong>
+            <small>ПРОФІ</small>
+        </button>
 
-      <div>
-        <b>Лідери</b>
-        <span>🥇 Рейтинг</span>
-      </div>
+        <button id="seasonButton" class="stat-card">
+            <span class="stat-title">СЕЗОН</span>
+            <strong>👑 №4</strong>
+            <small>8 д. 17 г.</small>
+        </button>
+
+        <button id="leadersButton" class="stat-card">
+            <span class="stat-title">ЛІДЕРИ</span>
+            <strong>🥇 1</strong>
+            <small>РЕЙТИНГ</small>
+        </button>
+
     </section>
 
+
+    <!-- НИЖНЯ НАВІГАЦІЯ -->
     <nav class="bottom-nav">
-      <button class="active">🏠<span>Головна</span></button>
-      <button>🃏<span>Гра</span></button>
-      <button>⚔️<span>Рейтинг</span></button>
-      <button>👤<span>Профіль</span></button>
-      <button>🏆<span>Досягнення</span></button>
+
+        <button class="active" id="homeButton">
+            <span>🏠</span>
+            <b>ГОЛОВНА</b>
+        </button>
+
+        <button id="gameButton">
+            <span>🃏</span>
+            <b>ГРА</b>
+        </button>
+
+        <button id="ratingNavButton">
+            <span>⚔️</span>
+            <b>РЕЙТИНГ</b>
+        </button>
+
+        <button id="profileButton">
+            <span>👤</span>
+            <b>ПРОФІЛЬ</b>
+        </button>
+
+        <button id="achievementsButton">
+            <span>🏆</span>
+            <b>ДОСЯГНЕННЯ</b>
+        </button>
+
     </nav>
 
-  </main>
+</main>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
