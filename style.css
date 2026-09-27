@@ -1,151 +1,623 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-  width: 100%;
-  min-height: 100%;
-  font-family: Georgia, "Times New Roman", serif;
-  background:
-    radial-gradient(circle at 50% 35%, rgba(105, 48, 12, 0.55), transparent 42%),
-    linear-gradient(180deg, #080604 0%, #1a0b05 45%, #080403 100%);
-  color: #fff4d0;
+    width: 100%;
+    min-height: 100%;
+    font-family: Georgia, "Times New Roman", serif;
+    color: #fff;
+    background:
+        radial-gradient(circle at 50% 35%, rgba(105, 48, 16, 0.55), transparent 38%),
+        linear-gradient(90deg, #090504 0%, #241006 22%, #3a1808 50%, #241006 78%, #090504 100%);
 }
 
 body {
-  min-height: 100vh;
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
 
-/* Загальна атмосфера */
+button {
+    font-family: inherit;
+    color: white;
+    cursor: pointer;
+    border: 0;
+}
+
+/* ===== ОСНОВА ===== */
+
 #app {
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse at center top, rgba(151, 76, 20, 0.35), transparent 45%),
-    linear-gradient(90deg,
-      rgba(0,0,0,.85) 0%,
-      rgba(47,19,7,.45) 25%,
-      rgba(72,29,8,.35) 50%,
-      rgba(47,19,7,.45) 75%,
-      rgba(0,0,0,.85) 100%);
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background:
+        linear-gradient(
+            rgba(8, 4, 2, 0.25),
+            rgba(8, 4, 2, 0.55)
+        ),
+        radial-gradient(
+            ellipse at center,
+            rgba(113, 50, 14, 0.5),
+            rgba(0, 0, 0, 0.95) 78%
+        );
 }
 
-/* декоративні бокові штори */
+/* декоративні бічні колони */
+
 #app::before,
 #app::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 15%;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, #170203, #5b080b 45%, #210204);
-  box-shadow:
-    inset 0 0 35px #000,
-    0 0 35px rgba(0,0,0,.8);
+    content: "";
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 7%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            90deg,
+            #080403,
+            #38200d 35%,
+            #9b641c 50%,
+            #3b200d 65%,
+            #080403
+        );
+    opacity: .8;
 }
 
 #app::before {
-  left: 0;
+    left: 0;
+    border-right: 2px solid #b67a28;
 }
 
 #app::after {
-  right: 0;
+    right: 0;
+    border-left: 2px solid #b67a28;
 }
 
-/* Верхня панель */
-.top-bar {
-  position: relative;
-  z-index: 5;
-  min-height: 76px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+/* ===== ВЕРХНЯ ПАНЕЛЬ ===== */
 
-  background:
-    linear-gradient(180deg, #101b2d, #07101d);
-  border-bottom: 2px solid #d99a28;
-  box-shadow:
-    0 4px 20px rgba(0,0,0,.8),
-    inset 0 -1px rgba(255,210,90,.35);
+.top-bar {
+    position: relative;
+    z-index: 10;
+
+    min-height: 78px;
+    padding: 10px 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10, 7, 5, .98),
+            rgba(32, 14, 6, .96)
+        );
+
+    border-bottom: 2px solid #b77a22;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, .8),
+        inset 0 -1px 0 #f0bd4d;
 }
 
 .profile {
-  display: flex;
-  align-items: center;
-  gap: 9px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
 }
 
 .avatar {
-  width: 54px;
-  height: 54px;
-  display: grid;
-  place-items: center;
-  border-radius: 13px;
+    width: 48px;
+    height: 48px;
 
-  font-size: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  background:
-    linear-gradient(145deg, #30405b, #101725);
-  border: 2px solid #e9a82c;
-  box-shadow:
-    0 0 10px rgba(237,165,36,.45),
-    inset 0 0 12px rgba(255,255,255,.08);
+    border-radius: 12px;
+
+    font-size: 28px;
+
+    background:
+        radial-gradient(circle, #49230e, #160a05);
+
+    border: 2px solid #e0a637;
+
+    box-shadow:
+        0 0 12px rgba(222, 156, 42, .45),
+        inset 0 0 10px #000;
 }
 
-.profile b {
-  display: block;
-  font-size: 17px;
+.profile-info {
+    display: flex;
+    flex-direction: column;
 }
 
-.profile small {
-  display: block;
-  margin-top: 3px;
-  color: #d8b978;
-  font-size: 10px;
+.profile-info strong {
+    font-size: 17px;
+}
+
+.profile-info small {
+    color: #c6a46b;
+    font-size: 10px;
+}
+
+.league {
+    display: none;
 }
 
 .currency {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
+    display: flex;
+    gap: 7px;
+    align-items: center;
 }
 
-.currency span {
-  min-width: 115px;
-  padding: 6px 10px;
-  text-align: right;
+.currency div {
+    padding: 7px 9px;
 
-  background: linear-gradient(145deg, #14253d, #07101c);
-  border: 1px solid #3e79aa;
-  border-radius: 10px;
+    border-radius: 9px;
 
-  font-size: 12px;
-  font-weight: bold;
+    background: linear-gradient(#172238, #080d18);
+
+    border: 1px solid #bf852d;
+
+    box-shadow:
+        inset 0 0 8px rgba(0, 0, 0, .7),
+        0 2px 7px #000;
+
+    font-size: 12px;
 }
 
-/* Центральна частина */
+.currency button {
+    margin-left: 3px;
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(#1686d9, #07528e);
+    border: 1px solid #63c4ff;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* ===== HERO ===== */
+
 .hero {
-  position: relative;
-  z-index: 2;
+    position: relative;
+    z-index: 2;
 
-  min-height: 550px;
-  padding: 50px 20px 25px;
+    min-height: 570px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-  background:
-    radial-gradient(ellipse at center
+    padding: 55px 20px 30px;
+}
+
+/* центральне світло */
+
+.hero::before {
+    content: "";
+    position: absolute;
+
+    width: 90%;
+    height: 80%;
+
+    top: 5%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(173, 81, 20, .35),
+            transparent 68%
+        );
+
+    filter: blur(25px);
+
+    z-index: -1;
+}
+
+/* ===== ЛОГО ===== */
+
+.game-logo {
+    position: relative;
+
+    width: min(88vw, 420px);
+
+    padding: 30px 25px 35px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #07152a,
+            #101d35 45%,
+            #050c18
+        );
+
+    border: 4px solid #d39a35;
+
+    clip-path: polygon(
+        8% 0,
+        92% 0,
+        100% 15%,
+        100% 85%,
+        92% 100%,
+        8% 100%,
+        0 85%,
+        0 15%
+    );
+
+    box-shadow:
+        0 0 0 2px #5c310d,
+        0 12px 35px rgba(0, 0, 0, .9),
+        inset 0 0 25px rgba(0, 0, 0, .8);
+}
+
+.logo-cards {
+    font-size: 30px;
+    letter-spacing: 9px;
+    color: #f2e2bd;
+    text-shadow: 0 2px 5px #000;
+}
+
+.game-logo h1 {
+    margin-top: 5px;
+
+    font-size: clamp(42px, 12vw, 72px);
+    line-height: .9;
+
+    letter-spacing: 3px;
+
+    color: #f6b932;
+
+    text-shadow:
+        0 3px 0 #713a0b,
+        0 5px 8px #000;
+}
+
+.game-logo h2 {
+    font-size: clamp(25px, 7vw, 40px);
+
+    letter-spacing: 9px;
+
+    color: #fff0bd;
+
+    text-shadow:
+        0 2px 0 #9c6217,
+        0 4px 8px #000;
+}
+
+.logo-crown {
+    position: absolute;
+
+    left: 50%;
+    bottom: -27px;
+
+    transform: translateX(-50%);
+
+    font-size: 48px;
+
+    color: #f5b62d;
+
+    text-shadow:
+        0 3px 0 #7c4209,
+        0 0 15px rgba(255, 190, 40, .5);
+}
+
+/* ===== КНОПКА ГРАТИ ===== */
+
+.play-button {
+    position: relative;
+
+    margin-top: 65px;
+
+    width: min(82vw, 360px);
+    min-height: 82px;
+
+    border-radius: 16px;
+
+    font-size: clamp(30px, 8vw, 46px);
+    font-weight: bold;
+    letter-spacing: 3px;
+
+    color: #fff5cf;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ff3d31 0%,
+            #d71316 45%,
+            #8e080b 100%
+        );
+
+    border: 4px solid #f2ba39;
+
+    box-shadow:
+        0 0 0 3px #6b2d0c,
+        0 8px 0 #4a1707,
+        0 14px 28px rgba(0, 0, 0, .8),
+        inset 0 2px 4px rgba(255, 255, 255, .35);
+
+    text-shadow:
+        0 3px 0 #73100b,
+        0 4px 7px #000;
+
+    transition: transform .15s, filter .15s;
+}
+
+.play-button::before {
+    content: "";
+
+    position: absolute;
+
+    left: 8%;
+    right: 8%;
+    top: 7px;
+
+    height: 3px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, .35);
+}
+
+.play-button:active {
+    transform: translateY(6px);
+    box-shadow:
+        0 0 0 3px #6b2d0c,
+        0 3px 0 #4a1707,
+        0 8px 18px rgba(0, 0, 0, .8);
+}
+
+/* ===== БІЧНІ МЕНЮ ===== */
+
+.side-menu,
+.right-menu {
+    position: absolute;
+
+    z-index: 5;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.side-menu {
+    left: 10px;
+    top: 135px;
+}
+
+.right-menu {
+    right: 10px;
+    top: 135px;
+}
+
+.side-menu button,
+.right-menu button {
+    width: 74px;
+    min-height: 72px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #16243a,
+            #070d18
+        );
+
+    border: 2px solid #b97b24;
+
+    box-shadow:
+        0 5px 12px #000,
+        inset 0 0 10px rgba(0, 0, 0, .8);
+}
+
+.side-menu button span,
+.right-menu button span {
+    font-size: 25px;
+}
+
+.side-menu button b,
+.right-menu button b {
+    font-size: 9px;
+    color: #f1d28d;
+}
+
+/* ===== СТАТИСТИКА ===== */
+
+.stats {
+    position: relative;
+    z-index: 3;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 8px;
+
+    padding: 10px 12px 100px;
+}
+
+.stat-card {
+    min-height: 100px;
+
+    padding: 10px 5px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #101d34,
+            #050914
+        );
+
+    border: 2px solid #c08a2e;
+
+    box-shadow:
+        0 5px 15px #000,
+        inset 0 0 12px rgba(0, 0, 0, .8);
+}
+
+.stat-title {
+    display: block;
+
+    color: #f5c54c;
+
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.stat-card strong {
+    display: block;
+
+    margin-top: 10px;
+
+    font-size: 19px;
+    color: #fff3c7;
+}
+
+.stat-card small {
+    color: #bca477;
+    font-size: 10px;
+}
+
+/* ===== НИЖНЯ НАВІГАЦІЯ ===== */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 20;
+
+    min-height: 76px;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+
+    padding: 7px 5px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #111d31,
+            #050914
+        );
+
+    border-top: 2px solid #c38a2d;
+
+    box-shadow:
+        0 -5px 20px #000;
+}
+
+.bottom-nav button {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    background: transparent;
+
+    color: #aeb5c1;
+
+    font-size: 10px;
+}
+
+.bottom-nav button span {
+    font-size: 25px;
+}
+
+.bottom-nav button b {
+    font-size: 9px;
+}
+
+.bottom-nav button.active {
+    color: #ffd24c;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(214, 153, 35, .28),
+            transparent 70%
+        );
+
+    border-radius: 12px;
+}
+
+.bottom-nav button.active::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: 0;
+
+    width: 42px;
+    height: 3px;
+
+    border-radius: 3px;
+
+    background: #ffd34e;
+
+    box-shadow: 0 0 8px #ffd34e;
+}
+
+/* ===== ВЕЛИКИЙ ЕКРАН ===== */
+
+@media (min-width: 700px) {
+
+    .hero {
+        min-height: 650px;
+    }
+
+    .side-menu,
+    .right-menu {
+        top: 170px;
+    }
+
+    .side-menu {
+        left: 30px;
+    }
+
+    .right-menu {
+        right: 30px;
+    }
+
+    .side-menu button,
+    .right-menu button {
+        width: 105px;
+        min-height: 90px;
+    }
+
+    .side-menu button b,
+    .right-menu button b {
+        font-size: 12px;
+    }
+
+    .stats {
+        padding-left: 12%;
+        padding-right: 12%;
+    }
+}
