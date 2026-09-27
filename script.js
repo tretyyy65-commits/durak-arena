@@ -1,7 +1,6 @@
 const playButton = document.getElementById("playButton");
 
 playButton.addEventListener("click", () => {
-  alert("🎴 Пошук гравців...\n\nDurak Arena");
 });
 
 const menuButtons = document.querySelectorAll(".quick-menu button");
@@ -10,7 +9,6 @@ menuButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const name = button.querySelector("span").textContent;
 
-    alert(`${name}\n\nРозділ буде доступний у наступній версії.`);
   });
 });
 
@@ -28,7 +26,6 @@ bottomButtons.forEach((button) => {
     const name = button.querySelector("span").textContent;
 
     if (name !== "Головна") {
-      alert(`${name}\n\nРозділ Durak Arena`);
     }
   });
 });
