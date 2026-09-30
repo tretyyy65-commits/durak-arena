@@ -17,9 +17,10 @@ import android.widget.TextView;
 /**
  * Durak Arena league road.
  *
- * Important: rank art is the same lightweight drawable artwork already used by
- * the Profile screen (rank_novice, rank_player, rank_pro, rank_master,
- * rank_elite, rank_legend). No Blender/GLB/Filament rendering is used here.
+ * Rank art stays lightweight: the same drawable family already used by the
+ * Profile screen (rank_novice, rank_player, rank_pro, rank_master,
+ * rank_elite, rank_legend). Each promotion is decorated progressively in code,
+ * so I / II / III no longer look identical. No Blender/GLB/Filament is used.
  */
 public class GloryPathView extends FrameLayout {
 
@@ -48,9 +49,6 @@ public class GloryPathView extends FrameLayout {
     private void build() {
         setBackgroundColor(BG);
 
-        // =====================================================
-        // FIXED HEADER
-        // =====================================================
         LinearLayout header = new LinearLayout(context);
         header.setOrientation(LinearLayout.HORIZONTAL);
         header.setGravity(Gravity.CENTER_VERTICAL);
@@ -77,9 +75,6 @@ public class GloryPathView extends FrameLayout {
         headerLP.gravity = Gravity.TOP;
         addView(header, headerLP);
 
-        // =====================================================
-        // SCROLL CONTENT
-        // =====================================================
         ScrollView scroll = new ScrollView(context);
         scroll.setFillViewport(true);
         scroll.setClipToPadding(false);
@@ -116,9 +111,7 @@ public class GloryPathView extends FrameLayout {
 
         int currentIndex = LeagueSystem.indexForCups(playerCups);
 
-        // =====================================================
-        // CURRENT LEAGUE HERO — SAME BADGE AS PROFILE
-        // =====================================================
+        // CURRENT LEAGUE HERO
         LinearLayout hero = new LinearLayout(context);
         hero.setOrientation(LinearLayout.VERTICAL);
         hero.setGravity(Gravity.CENTER);
@@ -128,8 +121,8 @@ public class GloryPathView extends FrameLayout {
         TextView heroSmall = makeText("ПОТОЧНА ЛІГА", 10, true, Gravity.CENTER, GOLD);
         hero.addView(heroSmall);
 
-        FrameLayout heroBadge = makeRankBadge(playerCups, false, true);
-        LinearLayout.LayoutParams heroBadgeLP = new LinearLayout.LayoutParams(dp(82), dp(82));
+        FrameLayout heroBadge = makeRankBadge(playerCups, false, true, currentIndex);
+        LinearLayout.LayoutParams heroBadgeLP = new LinearLayout.LayoutParams(dp(92), dp(92));
         heroBadgeLP.topMargin = dp(3);
         heroBadgeLP.bottomMargin = dp(2);
         hero.addView(heroBadge, heroBadgeLP);
@@ -211,11 +204,7 @@ public class GloryPathView extends FrameLayout {
         pathTitleLP.bottomMargin = dp(4);
         content.addView(pathTitle, pathTitleLP);
 
-        // =====================================================
         // LEAGUE ROAD
-        // Each league automatically receives the badge that belongs to the
-        // cup threshold of that league. This mirrors Profile badge switching.
-        // =====================================================
         for (int i = 0; i < LeagueSystem.NAMES.length; i++) {
             final boolean isCurrent = i == currentIndex;
             final boolean completed = i < currentIndex;
@@ -233,9 +222,10 @@ public class GloryPathView extends FrameLayout {
                     13
             ));
 
-            // Real lightweight league badge (same rank_*.png/webp resource as Profile).
-            FrameLayout badge = makeRankBadge(leagueCups, locked, isCurrent);
-            card.addView(badge, new LinearLayout.LayoutParams(dp(76), dp(76)));
+            // Same base artwork, but every I / II / III promotion gets a richer
+            // frame and promotion marks so consecutive leagues are visibly unique.
+            FrameLayout badge = makeRankBadge(leagueCups, locked, isCurrent, i);
+            card.addView(badge, new LinearLayout.LayoutParams(dp(82), dp(82)));
 
             LinearLayout info = new LinearLayout(context);
             info.setOrientation(LinearLayout.VERTICAL);
@@ -297,11 +287,13 @@ public class GloryPathView extends FrameLayout {
             );
             card.addView(right, new LinearLayout.LayoutParams(dp(45), LayoutParams.MATCH_PARENT));
 
-            if (locked) card.setAlpha(0.82f);
+            // Keep locked badges readable; previously the double alpha made them
+            // almost black on the dark background.
+            if (locked) card.setAlpha(0.92f);
 
             content.addView(card, new LinearLayout.LayoutParams(
                     LayoutParams.MATCH_PARENT,
-                    dp(102)
+                    dp(108)
             ));
 
             if (i < LeagueSystem.NAMES.length - 1) {
@@ -343,10 +335,6 @@ public class GloryPathView extends FrameLayout {
         addView(scroll, scrollLP);
     }
 
-    /**
-     * Returns the exact same major-rank asset family used by MainActivity's
-     * profile screen. As cups change, both screens move to the next badge.
-     */
     private String rankAssetSuffixForCups(int cups) {
         if (cups >= 5000) return "legend";
         if (cups >= 3500) return "elite";
@@ -356,10 +344,29 @@ public class GloryPathView extends FrameLayout {
         return "novice";
     }
 
-    private FrameLayout makeRankBadge(int cups, boolean locked, boolean current) {
+    /**
+     * Builds a lightweight premium badge. The PNG/WEBP remains the base art,
+     * while promotion I / II / III adds progressively stronger framing,
+     * larger artwork and 1 / 2 / 3 gold diamonds. This makes every promotion
+     * visibly better without bringing back expensive 3D models.
+     */
+    private FrameLayout makeRankBadge(int cups, boolean locked, boolean current, int leagueIndex) {
         FrameLayout holder = new FrameLayout(context);
         holder.setClipChildren(false);
         holder.setClipToPadding(false);
+
+        String leagueName = "";
+        if (leagueIndex >= 0 && leagueIndex < LeagueSystem.NAMES.length) {
+            leagueName = LeagueSystem.NAMES[leagueIndex];
+        }
+        int stage = promotionStage(leagueName);
+        int accent = promotionAccent(stage, current);
+
+        GradientDrawable outerFrame = new GradientDrawable();
+        outerFrame.setShape(GradientDrawable.OVAL);
+        outerFrame.setColor(Color.argb(current ? 32 : 12, 255, 198, 78));
+        outerFrame.setStroke(dp(current ? 3 : Math.max(1, stage + 1)), accent);
+        holder.setBackground(outerFrame);
 
         String suffix = rankAssetSuffixForCups(cups);
         String resourceName = "rank_" + suffix;
@@ -373,16 +380,19 @@ public class GloryPathView extends FrameLayout {
             ImageView icon = new ImageView(context);
             icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             icon.setAdjustViewBounds(true);
-            icon.setPadding(dp(2), dp(2), dp(2), dp(2));
+            int iconPadding = Math.max(1, 7 - stage * 2);
+            icon.setPadding(dp(iconPadding), dp(iconPadding), dp(iconPadding), dp(iconPadding));
             icon.setImageResource(id);
-            icon.setContentDescription(resourceName);
-            icon.setAlpha(locked ? 0.42f : 1.0f);
-            holder.addView(icon, new FrameLayout.LayoutParams(
+            icon.setContentDescription(resourceName + "_stage_" + stage);
+            icon.setAlpha(locked ? 0.66f : 1.0f);
+
+            FrameLayout.LayoutParams iconLP = new FrameLayout.LayoutParams(
                     LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT
-            ));
+            );
+            iconLP.setMargins(dp(3), dp(3), dp(3), dp(3));
+            holder.addView(icon, iconLP);
         } else {
-            // Safe fallback if an asset is temporarily absent from a device build.
             TextView fallback = makeText(
                     fallbackMarkForSuffix(suffix),
                     current ? 34 : 30,
@@ -396,7 +406,73 @@ public class GloryPathView extends FrameLayout {
             ));
         }
 
+        // Promotion diamonds: I = one, II = two, III = three.
+        // Base league gets a small central diamond and the cleanest frame.
+        String marks;
+        if (stage == 3) marks = "◆ ◆ ◆";
+        else if (stage == 2) marks = "◆ ◆";
+        else if (stage == 1) marks = "◆";
+        else marks = "·";
+
+        TextView promotion = makeText(
+                marks,
+                stage >= 2 ? 9 : 10,
+                true,
+                Gravity.CENTER,
+                locked ? Color.rgb(133, 111, 67) : accent
+        );
+        promotion.setPadding(dp(4), 0, dp(4), 0);
+        promotion.setBackground(solidPanel(
+                Color.argb(225, 2, 10, 8),
+                locked ? Color.rgb(83, 72, 53) : accent,
+                1,
+                8
+        ));
+
+        FrameLayout.LayoutParams promotionLP = new FrameLayout.LayoutParams(
+                stage == 3 ? dp(52) : (stage == 2 ? dp(42) : dp(30)),
+                dp(18)
+        );
+        promotionLP.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+        promotionLP.bottomMargin = dp(-2);
+        holder.addView(promotion, promotionLP);
+
+        // Highest sub-tier gets a small crown/star accent at the top, making
+        // every III badge clearly feel like the completed version of that rank.
+        if (stage == 3) {
+            TextView crown = makeText(
+                    "✦",
+                    13,
+                    true,
+                    Gravity.CENTER,
+                    locked ? Color.rgb(126, 104, 62) : GOLD_LIGHT
+            );
+            FrameLayout.LayoutParams crownLP = new FrameLayout.LayoutParams(dp(24), dp(22));
+            crownLP.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            crownLP.topMargin = dp(-5);
+            holder.addView(crown, crownLP);
+        }
+
         return holder;
+    }
+
+    private int promotionStage(String leagueName) {
+        if (leagueName == null) return 0;
+        String n = leagueName.trim().toUpperCase();
+        if (n.endsWith(" III")) return 3;
+        if (n.endsWith(" II")) return 2;
+        if (n.endsWith(" I")) return 1;
+        return 0;
+    }
+
+    private int promotionAccent(int stage, boolean current) {
+        if (current) return Color.rgb(255, 220, 126);
+        switch (stage) {
+            case 3: return Color.rgb(255, 211, 104);
+            case 2: return Color.rgb(232, 181, 76);
+            case 1: return Color.rgb(202, 147, 54);
+            default: return Color.rgb(155, 108, 43);
+        }
     }
 
     private String fallbackMarkForSuffix(String suffix) {
