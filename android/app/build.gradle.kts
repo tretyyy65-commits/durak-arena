@@ -5,7 +5,7 @@ android {
     namespace="com.nexora.durakarena"
     compileSdk=35
     defaultConfig {
-        applicationId="com.nexora.durakarena.test01"
+        applicationId="com.nexora.durakarena"
         minSdk=23
         targetSdk=35
         versionCode=3
