@@ -35,26 +35,10 @@ jobs:
                   raise SystemExit(f'Expected exactly one method {name}, found {count}')
               s = s2
 
-          replace_method(
-              'profileRankName',
-              'String',
-              '        return LeagueSystem.nameForCups(cups);'
-          )
-          replace_method(
-              'profileRankAssetSuffix',
-              'String',
-              '        return LeagueSystem.assetSuffixForCups(cups);'
-          )
-          replace_method(
-              'profileRankStart',
-              'int',
-              '        return LeagueSystem.startForCups(cups);'
-          )
-          replace_method(
-              'profileRankEnd',
-              'int',
-              '        return LeagueSystem.displayProgressTarget(cups);'
-          )
+          replace_method('profileRankName', 'String', '        return LeagueSystem.nameForCups(cups);')
+          replace_method('profileRankAssetSuffix', 'String', '        return LeagueSystem.assetSuffixForCups(cups);')
+          replace_method('profileRankStart', 'int', '        return LeagueSystem.startForCups(cups);')
+          replace_method('profileRankEnd', 'int', '        return LeagueSystem.displayProgressTarget(cups);')
 
           old = '        final int leagueProgress = Math.max(0, Math.min(playerCups - rankStart, rankEnd - rankStart));\n        final int leagueMax = Math.max(1, rankEnd - rankStart);'
           new = '        final int leagueProgress = LeagueSystem.progressForCups(playerCups);\n        final int leagueMax = LeagueSystem.progressMaxForCups(playerCups);'
@@ -63,24 +47,19 @@ jobs:
           s = s.replace(old, new, 1)
 
           old = '        rankBox.addView(profileText(rankName, 10, true, android.view.Gravity.CENTER));'
-          new = '''        android.widget.TextView rankLabel = profileText(rankName, 10, true, android.view.Gravity.CENTER);
-        rankLabel.setTextColor(LeagueSystem.colorForCups(playerCups));
-        rankBox.addView(rankLabel);'''
+          new = '        android.widget.TextView rankLabel = profileText(rankName, 10, true, android.view.Gravity.CENTER);\n        rankLabel.setTextColor(LeagueSystem.colorForCups(playerCups));\n        rankBox.addView(rankLabel);'
           if s.count(old) != 1:
               raise SystemExit(f'Expected one rank label line, found {s.count(old)}')
           s = s.replace(old, new, 1)
 
           old = '        league.addView(profileMutedText(rankName + "   •   " + playerCups + " кубків", 13));'
-          new = '''        android.widget.TextView leagueState = profileMutedText(rankName + "   •   " + playerCups + " кубків", 13);
-        leagueState.setTextColor(LeagueSystem.colorForCups(playerCups));
-        league.addView(leagueState);'''
+          new = '        android.widget.TextView leagueState = profileMutedText(rankName + "   •   " + playerCups + " кубків", 13);\n        leagueState.setTextColor(LeagueSystem.colorForCups(playerCups));\n        league.addView(leagueState);'
           if s.count(old) != 1:
               raise SystemExit(f'Expected one league state line, found {s.count(old)}')
           s = s.replace(old, new, 1)
 
           old = '        android.widget.ProgressBar leagueBar = profileProgress(leagueProgress, leagueMax);'
-          new = '''        android.widget.ProgressBar leagueBar = profileProgress(leagueProgress, leagueMax);
-        leagueBar.setProgressTintList(android.content.res.ColorStateList.valueOf(LeagueSystem.colorForCups(playerCups)));'''
+          new = '        android.widget.ProgressBar leagueBar = profileProgress(leagueProgress, leagueMax);\n        leagueBar.setProgressTintList(android.content.res.ColorStateList.valueOf(LeagueSystem.colorForCups(playerCups)));'
           if s.count(old) != 1:
               raise SystemExit(f'Expected one league bar line, found {s.count(old)}')
           s = s.replace(old, new, 1)
@@ -104,6 +83,9 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add android/app/src/main/java/com/nexora/durakarena/MainActivity.java
-          git diff --cached --quiet && exit 0
-          git commit -m 'Sync profile rank and league progress with LeagueSystem [skip ci]'
+          if git diff --cached --quiet; then
+            echo 'No profile changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Sync profile rank and league progress with LeagueSystem'
           git push
