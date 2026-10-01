@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
 }
 android {
     namespace="com.nexora.durakarena"
@@ -8,8 +9,8 @@ android {
         applicationId="com.nexora.durakarena"
         minSdk=23
         targetSdk=35
-        versionCode=3
-        versionName="0.1"
+        versionCode=4
+        versionName="0.1.1"
     }
 }
 dependencies {
