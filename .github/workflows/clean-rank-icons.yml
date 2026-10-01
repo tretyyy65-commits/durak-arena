@@ -1,0 +1,107 @@
+name: Clean Glory Path Rank Icons
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/clean-rank-icons.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove photo-like frames around rank assets
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('android/app/src/main/java/com/nexora/durakarena/GloryPathView.java')
+          s = p.read_text(encoding='utf-8')
+
+          old = '''        FrameLayout currentBadgeHolder = new FrameLayout(context);
+        currentBadgeHolder.setBackground(circle(Color.argb(210, 0, 11, 9), leagueColor, 2));
+        currentBadgeHolder.setPadding(dp(4), dp(4), dp(4), dp(4));
+        ImageView currentBadge = rankImage(currentIndex, 1f);
+        currentBadgeHolder.addView(currentBadge, new FrameLayout.LayoutParams(-1, -1));
+        addView(currentBadgeHolder, new FrameLayout.LayoutParams(1, 1));'''
+          new = '''        FrameLayout currentBadgeHolder = new FrameLayout(context);
+        // Rank art is a standalone transparent emblem — never a framed photo cutout.
+        currentBadgeHolder.setBackgroundColor(Color.TRANSPARENT);
+        currentBadgeHolder.setPadding(0, 0, 0, 0);
+        currentBadgeHolder.setClipChildren(false);
+        ImageView currentBadge = rankImage(currentIndex, 1f);
+        currentBadge.setBackgroundColor(Color.TRANSPARENT);
+        currentBadgeHolder.addView(currentBadge, new FrameLayout.LayoutParams(-1, -1));
+        addView(currentBadgeHolder, new FrameLayout.LayoutParams(1, 1));'''
+          if old not in s:
+              raise SystemExit('current badge block not found')
+          s = s.replace(old, new, 1)
+
+          old = '''        FrameLayout nextBadgeHolder = new FrameLayout(context);
+        nextBadgeHolder.setBackground(circle(Color.argb(210, 0, 11, 9),
+                LeagueSystem.familyColorForIndex(nextIndex), 1));
+        nextBadgeHolder.setPadding(dp(3), dp(3), dp(3), dp(3));
+        nextBadgeHolder.addView(rankImage(nextIndex, 0.95f), new FrameLayout.LayoutParams(-1, -1));
+        addView(nextBadgeHolder, new FrameLayout.LayoutParams(1, 1));'''
+          new = '''        FrameLayout nextBadgeHolder = new FrameLayout(context);
+        nextBadgeHolder.setBackgroundColor(Color.TRANSPARENT);
+        nextBadgeHolder.setPadding(0, 0, 0, 0);
+        nextBadgeHolder.setClipChildren(false);
+        ImageView nextBadge = rankImage(nextIndex, 0.95f);
+        nextBadge.setBackgroundColor(Color.TRANSPARENT);
+        nextBadgeHolder.addView(nextBadge, new FrameLayout.LayoutParams(-1, -1));
+        addView(nextBadgeHolder, new FrameLayout.LayoutParams(1, 1));'''
+          if old not in s:
+              raise SystemExit('next badge block not found')
+          s = s.replace(old, new, 1)
+
+          s = s.replace(
+              '            place(currentBadgeHolder, w, h, .354f, .318f, .292f, .210f);',
+              '            place(currentBadgeHolder, w, h, .365f, .325f, .270f, .185f);',
+              1
+          )
+          s = s.replace(
+              '            place(nextBadgeHolder, w, h, .790f, .405f, .170f, .125f);',
+              '            place(nextBadgeHolder, w, h, .805f, .415f, .145f, .105f);',
+              1
+          )
+
+          old = '''        ImageView image = new ImageView(context);
+        image.setScaleType(ImageView.ScaleType.FIT_CENTER);'''
+          new = '''        ImageView image = new ImageView(context);
+        image.setBackgroundColor(Color.TRANSPARENT);
+        image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        image.setAdjustViewBounds(false);
+        image.setCropToPadding(false);'''
+          # Replace only rankImage's first occurrence after its signature.
+          marker = '    private ImageView rankImage(int index, float alpha) {'
+          pos = s.find(marker)
+          if pos < 0:
+              raise SystemExit('rankImage method not found')
+          tail = s[pos:]
+          if old not in tail:
+              raise SystemExit('rankImage image block not found')
+          tail = tail.replace(old, new, 1)
+          s = s[:pos] + tail
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Verify rank icons are transparent standalone assets
+        run: |
+          grep -q 'currentBadgeHolder.setBackgroundColor(Color.TRANSPARENT)' android/app/src/main/java/com/nexora/durakarena/GloryPathView.java
+          grep -q 'nextBadgeHolder.setBackgroundColor(Color.TRANSPARENT)' android/app/src/main/java/com/nexora/durakarena/GloryPathView.java
+          grep -q 'image.setBackgroundColor(Color.TRANSPARENT)' android/app/src/main/java/com/nexora/durakarena/GloryPathView.java
+
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add android/app/src/main/java/com/nexora/durakarena/GloryPathView.java
+          git commit -m 'Render rank badges as standalone transparent icons'
+          git push
