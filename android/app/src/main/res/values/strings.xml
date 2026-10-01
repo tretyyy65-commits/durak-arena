@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Durak Arena</string>
+    <string name="default_web_client_id">701648494544-kptje6gbr1vd8q0v9g90ueov7dhplb9k.apps.googleusercontent.com</string>
 </resources>
