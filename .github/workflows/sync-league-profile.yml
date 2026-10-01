@@ -1,0 +1,109 @@
+name: Sync League Profile
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/sync-league-profile.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync-profile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch profile to use LeagueSystem
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('android/app/src/main/java/com/nexora/durakarena/MainActivity.java')
+          s = p.read_text(encoding='utf-8')
+          original = s
+
+          def replace_method(name, return_type, body):
+              global s
+              pattern = rf'    private {re.escape(return_type)} {re.escape(name)}\(int cups\) \{{.*?\n    \}}'
+              replacement = f'    private {return_type} {name}(int cups) {{\n{body}\n    }}'
+              s2, count = re.subn(pattern, replacement, s, count=1, flags=re.S)
+              if count != 1:
+                  raise SystemExit(f'Expected exactly one method {name}, found {count}')
+              s = s2
+
+          replace_method(
+              'profileRankName',
+              'String',
+              '        return LeagueSystem.nameForCups(cups);'
+          )
+          replace_method(
+              'profileRankAssetSuffix',
+              'String',
+              '        return LeagueSystem.assetSuffixForCups(cups);'
+          )
+          replace_method(
+              'profileRankStart',
+              'int',
+              '        return LeagueSystem.startForCups(cups);'
+          )
+          replace_method(
+              'profileRankEnd',
+              'int',
+              '        return LeagueSystem.displayProgressTarget(cups);'
+          )
+
+          old = '        final int leagueProgress = Math.max(0, Math.min(playerCups - rankStart, rankEnd - rankStart));\n        final int leagueMax = Math.max(1, rankEnd - rankStart);'
+          new = '        final int leagueProgress = LeagueSystem.progressForCups(playerCups);\n        final int leagueMax = LeagueSystem.progressMaxForCups(playerCups);'
+          if s.count(old) != 1:
+              raise SystemExit(f'Expected one league progress block, found {s.count(old)}')
+          s = s.replace(old, new, 1)
+
+          old = '        rankBox.addView(profileText(rankName, 10, true, android.view.Gravity.CENTER));'
+          new = '''        android.widget.TextView rankLabel = profileText(rankName, 10, true, android.view.Gravity.CENTER);
+        rankLabel.setTextColor(LeagueSystem.colorForCups(playerCups));
+        rankBox.addView(rankLabel);'''
+          if s.count(old) != 1:
+              raise SystemExit(f'Expected one rank label line, found {s.count(old)}')
+          s = s.replace(old, new, 1)
+
+          old = '        league.addView(profileMutedText(rankName + "   •   " + playerCups + " кубків", 13));'
+          new = '''        android.widget.TextView leagueState = profileMutedText(rankName + "   •   " + playerCups + " кубків", 13);
+        leagueState.setTextColor(LeagueSystem.colorForCups(playerCups));
+        league.addView(leagueState);'''
+          if s.count(old) != 1:
+              raise SystemExit(f'Expected one league state line, found {s.count(old)}')
+          s = s.replace(old, new, 1)
+
+          old = '        android.widget.ProgressBar leagueBar = profileProgress(leagueProgress, leagueMax);'
+          new = '''        android.widget.ProgressBar leagueBar = profileProgress(leagueProgress, leagueMax);
+        leagueBar.setProgressTintList(android.content.res.ColorStateList.valueOf(LeagueSystem.colorForCups(playerCups)));'''
+          if s.count(old) != 1:
+              raise SystemExit(f'Expected one league bar line, found {s.count(old)}')
+          s = s.replace(old, new, 1)
+
+          if s == original:
+              raise SystemExit('No changes made')
+
+          p.write_text(s, encoding='utf-8')
+          print('Profile league synchronization patch applied.')
+          PY
+
+      - name: Verify expected dynamic league hooks
+        run: |
+          grep -q 'LeagueSystem.nameForCups(cups)' android/app/src/main/java/com/nexora/durakarena/MainActivity.java
+          grep -q 'LeagueSystem.assetSuffixForCups(cups)' android/app/src/main/java/com/nexora/durakarena/MainActivity.java
+          grep -q 'LeagueSystem.progressForCups(playerCups)' android/app/src/main/java/com/nexora/durakarena/MainActivity.java
+          grep -q 'LeagueSystem.colorForCups(playerCups)' android/app/src/main/java/com/nexora/durakarena/MainActivity.java
+
+      - name: Commit synchronized profile
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add android/app/src/main/java/com/nexora/durakarena/MainActivity.java
+          git diff --cached --quiet && exit 0
+          git commit -m 'Sync profile rank and league progress with LeagueSystem [skip ci]'
+          git push
