@@ -11,8 +11,23 @@ android {
         applicationId = "com.nexora.durakarena"
         minSdk = 23
         targetSdk = 35
-        versionCode = 5
-        versionName = "0.1.2"
+        versionCode = 6
+        versionName = "0.1.3"
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file(System.getProperty("user.home") + "/.android/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
+    buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
     }
 }
 
