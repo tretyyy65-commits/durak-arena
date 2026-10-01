@@ -1,15 +1,14 @@
 plugins {
     id("com.android.application")
-    id("com.google.gms.google-services")
 }
 android {
     namespace="com.nexora.durakarena"
     compileSdk=35
     defaultConfig {
-        applicationId="com.nexora.durakarena"
+        applicationId="com.nexora.durakarena.test01"
         minSdk=23
         targetSdk=35
-        versionCode=2
+        versionCode=3
         versionName="0.1"
     }
 }
