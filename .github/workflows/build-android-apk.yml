@@ -30,12 +30,41 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Restore persistent Android debug signing key
+        env:
+          KEYSTORE_B64: ${{ secrets.DURAK_ARENA_DEBUG_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "Missing DURAK_ARENA_DEBUG_KEYSTORE_B64 secret"
+            exit 1
+          fi
+          mkdir -p "$HOME/.android"
+          printf '%s' "$KEYSTORE_B64" | base64 --decode > "$HOME/.android/debug.keystore"
+          chmod 600 "$HOME/.android/debug.keystore"
+
+      - name: Verify Firebase signing SHA-1
+        run: |
+          EXPECTED="51:6E:60:D3:5C:F6:E8:FC:34:AB:87:59:33:4E:B5:06:73:BB:3E:4C"
+          ACTUAL=$(keytool -list -v \
+            -keystore "$HOME/.android/debug.keystore" \
+            -storepass android \
+            -alias androiddebugkey 2>/dev/null | awk '/SHA1:/{print $2; exit}')
+          echo "Android signing SHA-1: $ACTUAL"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "Signing key does not match Firebase OAuth SHA-1."
+            exit 1
+          fi
+
       - name: Build debug APK
         working-directory: android
-        run: gradle assembleDebug --no-daemon
+        run: gradle clean assembleDebug --no-daemon
 
       - name: Prepare DurakArena.apk
         run: cp android/app/build/outputs/apk/debug/app-debug.apk DurakArena.apk
+
+      - name: Verify APK signature
+        run: |
+          keytool -printcert -jarfile DurakArena.apk | grep -E 'SHA1:|SHA256:'
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
