@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "701648494544",
+    "project_id": "arena-durak",
+    "storage_bucket": "arena-durak.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701648494544:android:1b88809c04d570902423d5",
+        "android_client_info": {
+          "package_name": "com.nexora.durakarena"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701648494544-e4o5jhubnvvhvur78aj23hbc01sp91gn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nexora.durakarena",
+            "certificate_hash": "516e60d35cf6e8fc34ab8759334eb50673bb3e4c"
+          }
+        },
+        {
+          "client_id": "701648494544-kptje6gbr1vd8q0v9g90ueov7dhplb9k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-nnULVK_NnhcEtQpQa7VuYyEIzitGYBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701648494544-kptje6gbr1vd8q0v9g90ueov7dhplb9k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
