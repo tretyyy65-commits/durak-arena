@@ -11,8 +11,8 @@ android {
         applicationId = "com.nexora.durakarena"
         minSdk = 23
         targetSdk = 35
-        versionCode = 6
-        versionName = "0.1.3"
+        versionCode = 7
+        versionName = "0.1.4"
     }
 
     signingConfigs {
@@ -32,6 +32,7 @@ android {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")

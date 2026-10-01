@@ -1058,7 +1058,7 @@ public class MainActivity extends Activity {
         moneyBox.setBackground(moneyBg);
 
         android.widget.TextView money = new android.widget.TextView(this);
-        money.setText("🪙  0   +");
+        money.setText("🪙  " + GloryRewards.balance(this, "coins"));
         money.setTextSize(14);
         money.setTextColor(android.graphics.Color.rgb(255, 218, 145));
         money.setGravity(android.view.Gravity.CENTER);
@@ -1066,7 +1066,7 @@ public class MainActivity extends Activity {
                 android.graphics.Typeface.BOLD);
 
         android.widget.TextView gems = new android.widget.TextView(this);
-        gems.setText("   💎  0   +");
+        gems.setText("   💎  " + GloryRewards.balance(this, "crystals"));
         gems.setTextSize(14);
         gems.setTextColor(android.graphics.Color.rgb(255, 218, 145));
         gems.setGravity(android.view.Gravity.CENTER);
