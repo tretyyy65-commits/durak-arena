@@ -79,12 +79,14 @@ public class GloryPathView extends FrameLayout {
         addView(pathMask, new FrameLayout.LayoutParams(1, 1));
 
         // -------------------------------------------------------------
-        // CURRENT LEAGUE — live rank image + live name.
+        // CURRENT LEAGUE — standalone transparent rank asset + live name.
         // -------------------------------------------------------------
         FrameLayout currentBadgeHolder = new FrameLayout(context);
-        currentBadgeHolder.setBackground(circle(Color.argb(210, 0, 11, 9), leagueColor, 2));
-        currentBadgeHolder.setPadding(dp(4), dp(4), dp(4), dp(4));
+        currentBadgeHolder.setBackgroundColor(Color.TRANSPARENT);
+        currentBadgeHolder.setPadding(0, 0, 0, 0);
+        currentBadgeHolder.setClipChildren(false);
         ImageView currentBadge = rankImage(currentIndex, 1f);
+        currentBadge.setBackgroundColor(Color.TRANSPARENT);
         currentBadgeHolder.addView(currentBadge, new FrameLayout.LayoutParams(-1, -1));
         addView(currentBadgeHolder, new FrameLayout.LayoutParams(1, 1));
 
@@ -98,12 +100,14 @@ public class GloryPathView extends FrameLayout {
         currentName.setShadowLayer(dp(4), 0, dp(1), Color.BLACK);
         addView(currentName, new FrameLayout.LayoutParams(1, 1));
 
-        // Next rank preview on the right.
+        // Next rank preview on the right — also only the transparent emblem.
         FrameLayout nextBadgeHolder = new FrameLayout(context);
-        nextBadgeHolder.setBackground(circle(Color.argb(210, 0, 11, 9),
-                LeagueSystem.familyColorForIndex(nextIndex), 1));
-        nextBadgeHolder.setPadding(dp(3), dp(3), dp(3), dp(3));
-        nextBadgeHolder.addView(rankImage(nextIndex, 0.95f), new FrameLayout.LayoutParams(-1, -1));
+        nextBadgeHolder.setBackgroundColor(Color.TRANSPARENT);
+        nextBadgeHolder.setPadding(0, 0, 0, 0);
+        nextBadgeHolder.setClipChildren(false);
+        ImageView nextBadge = rankImage(nextIndex, 0.95f);
+        nextBadge.setBackgroundColor(Color.TRANSPARENT);
+        nextBadgeHolder.addView(nextBadge, new FrameLayout.LayoutParams(-1, -1));
         addView(nextBadgeHolder, new FrameLayout.LayoutParams(1, 1));
 
         // -------------------------------------------------------------
@@ -198,12 +202,12 @@ public class GloryPathView extends FrameLayout {
             if (w <= 0 || h <= 0) return;
 
             place(centerMask, w, h, .335f, .305f, .345f, .255f);
-            place(currentBadgeHolder, w, h, .354f, .318f, .292f, .210f);
+            place(currentBadgeHolder, w, h, .365f, .325f, .270f, .185f);
             place(currentName, w, h, .315f, .490f, .370f, .035f);
 
             place(leftArrow, w, h, .245f, .385f, .080f, .075f);
             place(rightArrow, w, h, .692f, .385f, .080f, .075f);
-            place(nextBadgeHolder, w, h, .790f, .405f, .170f, .125f);
+            place(nextBadgeHolder, w, h, .805f, .415f, .145f, .105f);
 
             place(trophyLeft, w, h, .275f, .505f, .055f, .040f);
             place(progressBox, w, h, .335f, .510f, .365f, .034f);
@@ -251,7 +255,6 @@ public class GloryPathView extends FrameLayout {
         for (int tier = 0; tier < 3; tier++) {
             int index = family * 3 + tier;
             boolean active = index == currentIndex;
-            boolean completed = index < currentIndex;
             boolean locked = index > currentIndex;
             int color = LeagueSystem.familyColorForIndex(index);
 
@@ -300,7 +303,10 @@ public class GloryPathView extends FrameLayout {
 
     private ImageView rankImage(int index, float alpha) {
         ImageView image = new ImageView(context);
+        image.setBackgroundColor(Color.TRANSPARENT);
         image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        image.setAdjustViewBounds(false);
+        image.setCropToPadding(false);
         int id = context.getResources().getIdentifier(
                 LeagueSystem.assetForIndex(index),
                 "drawable",
@@ -339,14 +345,6 @@ public class GloryPathView extends FrameLayout {
         GradientDrawable d = new GradientDrawable();
         d.setColor(fill);
         d.setCornerRadius(dp(radius));
-        if (width > 0) d.setStroke(dp(width), stroke);
-        return d;
-    }
-
-    private GradientDrawable circle(int fill, int stroke, int width) {
-        GradientDrawable d = new GradientDrawable();
-        d.setShape(GradientDrawable.OVAL);
-        d.setColor(fill);
         if (width > 0) d.setStroke(dp(width), stroke);
         return d;
     }
