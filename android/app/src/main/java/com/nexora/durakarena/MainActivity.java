@@ -2588,8 +2588,8 @@ currentScreen = "matchmaking";
         final String rankName = profileRankName(playerCups);
         final int rankStart = profileRankStart(playerCups);
         final int rankEnd = profileRankEnd(playerCups);
-        final int leagueProgress = Math.max(0, Math.min(playerCups - rankStart, rankEnd - rankStart));
-        final int leagueMax = Math.max(1, rankEnd - rankStart);
+        final int leagueProgress = LeagueSystem.progressForCups(playerCups);
+        final int leagueMax = LeagueSystem.progressMaxForCups(playerCups);
         final int xpNeed = Math.max(100, 500 + (playerLevel - 1) * 100);
         final int totalGames = playerWins + playerLosses + playerDraws;
         final int winRate = totalGames == 0 ? 0 : Math.round((playerWins * 100f) / totalGames);
@@ -2687,7 +2687,9 @@ currentScreen = "matchmaking";
         rankBox.setGravity(android.view.Gravity.CENTER);
         android.widget.ImageView rankIcon = profileAsset("rank_" + profileRankAssetSuffix(playerCups), dp(62));
         rankBox.addView(rankIcon, new android.widget.LinearLayout.LayoutParams(dp(62), dp(62)));
-        rankBox.addView(profileText(rankName, 10, true, android.view.Gravity.CENTER));
+        android.widget.TextView rankLabel = profileText(rankName, 10, true, android.view.Gravity.CENTER);
+        rankLabel.setTextColor(LeagueSystem.colorForCups(playerCups));
+        rankBox.addView(rankLabel);
         identity.addView(rankBox, new android.widget.LinearLayout.LayoutParams(dp(78), WRAP));
         page.addView(identity, profileSectionParams());
 
@@ -2718,8 +2720,11 @@ currentScreen = "matchmaking";
         // League path + calculated progress
         android.widget.LinearLayout league = profilePanelLayout();
         league.addView(profileText("ШЛЯХ ЛІГИ", 16, true, android.view.Gravity.LEFT));
-        league.addView(profileMutedText(rankName + "   •   " + playerCups + " кубків", 13));
+        android.widget.TextView leagueState = profileMutedText(rankName + "   •   " + playerCups + " кубків", 13);
+        leagueState.setTextColor(LeagueSystem.colorForCups(playerCups));
+        league.addView(leagueState);
         android.widget.ProgressBar leagueBar = profileProgress(leagueProgress, leagueMax);
+        leagueBar.setProgressTintList(android.content.res.ColorStateList.valueOf(LeagueSystem.colorForCups(playerCups)));
         android.widget.LinearLayout.LayoutParams leagueBarLp = new android.widget.LinearLayout.LayoutParams(MATCH, dp(11));
         leagueBarLp.topMargin = dp(10); leagueBarLp.bottomMargin = dp(6);
         league.addView(leagueBar, leagueBarLp);
@@ -2853,39 +2858,19 @@ currentScreen = "matchmaking";
     }
 
     private String profileRankName(int cups) {
-        if (cups >= 5000) return "ЛЕГЕНДА";
-        if (cups >= 3500) return "ЕЛІТА";
-        if (cups >= 2200) return "МАЙСТЕР";
-        if (cups >= 1200) return "ПРОФІ";
-        if (cups >= 500) return "ГРАВЕЦЬ";
-        return "НОВАЧОК";
+        return LeagueSystem.nameForCups(cups);
     }
 
     private String profileRankAssetSuffix(int cups) {
-        if (cups >= 5000) return "legend";
-        if (cups >= 3500) return "elite";
-        if (cups >= 2200) return "master";
-        if (cups >= 1200) return "pro";
-        if (cups >= 500) return "player";
-        return "novice";
+        return LeagueSystem.assetSuffixForCups(cups);
     }
 
     private int profileRankStart(int cups) {
-        if (cups >= 5000) return 5000;
-        if (cups >= 3500) return 3500;
-        if (cups >= 2200) return 2200;
-        if (cups >= 1200) return 1200;
-        if (cups >= 500) return 500;
-        return 0;
+        return LeagueSystem.startForCups(cups);
     }
 
     private int profileRankEnd(int cups) {
-        if (cups >= 5000) return 6500;
-        if (cups >= 3500) return 5000;
-        if (cups >= 2200) return 3500;
-        if (cups >= 1200) return 2200;
-        if (cups >= 500) return 1200;
-        return 500;
+        return LeagueSystem.displayProgressTarget(cups);
     }
 
     private void showProfileSubScreen(String titleText, String bodyText, String backTarget) {
