@@ -136,9 +136,14 @@ public class GloryPathView extends FrameLayout {
         row.addView(text(value,12,true,Gravity.CENTER,color)); return row;
     }
     private FrameLayout makeBadge(int index,boolean locked){
-        FrameLayout h=new FrameLayout(context); int id=context.getResources().getIdentifier(LeagueSystem.assetForIndex(index),"drawable",context.getPackageName());
+        FrameLayout h=new FrameLayout(context); int id=context.getResources().getIdentifier(index<3?"rank_novice":LeagueSystem.assetForIndex(index),"drawable",context.getPackageName());
         if(id!=0){ ImageView v=new ImageView(context); v.setImageResource(id); v.setScaleType(ImageView.ScaleType.FIT_CENTER); v.setAlpha(locked?.48f:1f); h.addView(v,new FrameLayout.LayoutParams(-1,-1)); }
         else { h.setBackground(circle(LeagueSystem.familyColorForIndex(index))); h.addView(text("♠",28,true,Gravity.CENTER,LeagueSystem.familyColorForIndex(index)),new FrameLayout.LayoutParams(-1,-1)); }
+        if(index<3){
+            TextView tier=text(LeagueSystem.tierRomanForIndex(index),10,true,Gravity.CENTER,GOLD_LIGHT);
+            tier.setBackground(panel(BG,GOLD,1,5));
+            FrameLayout.LayoutParams tp=new FrameLayout.LayoutParams(dp(30),dp(19),Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL); h.addView(tier,tp);
+        }
         return h;
     }
     private TextView text(String s,int z,boolean b,int g,int c){ TextView v=new TextView(context); v.setText(s); v.setTextSize(z); v.setTextColor(c); v.setGravity(g); if(b)v.setTypeface(Typeface.DEFAULT,Typeface.BOLD); v.setPadding(dp(4),0,dp(4),0); return v; }
