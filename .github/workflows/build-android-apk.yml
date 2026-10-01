@@ -1,5 +1,6 @@
 name: Build Durak Arena APK
 
+# Build verification marker: dynamic league/profile sync
 on:
   push:
     branches: [ main ]
