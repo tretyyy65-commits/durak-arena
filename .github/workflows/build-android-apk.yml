@@ -62,9 +62,15 @@ jobs:
       - name: Prepare DurakArena.apk
         run: cp android/app/build/outputs/apk/debug/app-debug.apk DurakArena.apk
 
-      - name: Verify APK signature
+      - name: Verify APK signature matches Firebase
         run: |
-          keytool -printcert -jarfile DurakArena.apk | grep -E 'SHA1:|SHA256:'
+          EXPECTED="51:6E:60:D3:5C:F6:E8:FC:34:AB:87:59:33:4E:B5:06:73:BB:3E:4C"
+          ACTUAL=$(keytool -printcert -jarfile DurakArena.apk | awk '/SHA1:/{print $2; exit}')
+          echo "APK signing SHA-1: $ACTUAL"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "Built APK is signed with the wrong certificate."
+            exit 1
+          fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
