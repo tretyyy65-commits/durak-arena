@@ -26,12 +26,26 @@ public final class LeagueSystem {
     public static String nextNameForCups(int cups){ int i=indexForCups(cups); return i>=NAMES.length-1?NAMES[i]:NAMES[i+1]; }
     public static boolean isMaxLeague(int cups){ return indexForCups(cups)==NAMES.length-1; }
 
+    /** Cups earned inside the current league tier. */
+    public static int progressForCups(int cups) {
+        int c = Math.max(0, cups);
+        if (isMaxLeague(c)) return 0;
+        return Math.max(0, c - startForCups(c));
+    }
+
+    /** Number of cups required to fill the current league progress bar. */
+    public static int progressMaxForCups(int cups) {
+        int c = Math.max(0, cups);
+        if (isMaxLeague(c)) return 1;
+        return Math.max(1, nextStartForCups(c) - startForCups(c));
+    }
+
     public static int familyColorForIndex(int i){
-        if(i<3) return Color.rgb(196,145,69);      // novice bronze/gold
-        if(i<6) return Color.rgb(72,174,150);      // pro emerald/teal
-        if(i<9) return Color.rgb(65,151,211);      // master blue
-        if(i<12) return Color.rgb(157,88,211);     // elite violet
-        return Color.rgb(242,191,72);              // legend royal gold
+        if(i<3) return Color.rgb(196,145,69);
+        if(i<6) return Color.rgb(72,174,150);
+        if(i<9) return Color.rgb(65,151,211);
+        if(i<12) return Color.rgb(157,88,211);
+        return Color.rgb(242,191,72);
     }
     public static int colorForCups(int cups){ return familyColorForIndex(indexForCups(cups)); }
 
