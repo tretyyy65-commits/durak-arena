@@ -36,7 +36,7 @@ public class GloryPathView extends FrameLayout {
     private String leagueName(int i){
         String[] uk={"НОВАЧОК","ПРОФІ","МАЙСТЕР","ЕЛІТА","ЛЕГЕНДА"};
         String[] en={"NOVICE","PRO","MASTER","ELITE","LEGEND"};
-        String[] de={"ANFÄNGER","PROFI","MEISTER","ELITE","LEGENDE"};
+        String[] de={"ANFÄНGER","PROFI","MEISTER","ELITE","LEGENDE"};
         String[] es={"NOVATO","PRO","MAESTRO","ÉLITE","LEYENDA"};
         int f=i/3; String base=tr(uk[f],en[f],de[f],es[f]); return base+" "+new String[]{"I","II","III"}[i%3];
     }
@@ -61,7 +61,7 @@ public class GloryPathView extends FrameLayout {
 
         LinearLayout hero=new LinearLayout(context); hero.setOrientation(LinearLayout.VERTICAL); hero.setGravity(Gravity.CENTER); hero.setPadding(dp(14),dp(10),dp(14),dp(12)); hero.setBackground(panel(CURRENT,accent,2,14));
         hero.addView(text(tr("ПОТОЧНА ЛІГА","CURRENT LEAGUE","AKTUELLE LIGA","LIGA ACTUAL"),10,true,Gravity.CENTER,accent));
-        hero.addView(makeBadge(ci,false),new LinearLayout.LayoutParams(dp(92),dp(92)));
+        hero.addView(makeBadge(ci,false),new LinearLayout.LayoutParams(dp(100),dp(100)));
         hero.addView(text(leagueName(ci),20,true,Gravity.CENTER,accent),new LinearLayout.LayoutParams(-1,dp(31)));
         if(!LeagueSystem.isMaxLeague(playerCups)){
             int start=LeagueSystem.startForCups(playerCups), next=LeagueSystem.nextStartForCups(playerCups), span=Math.max(1,next-start), progress=Math.max(0,Math.min(span,playerCups-start));
@@ -82,7 +82,7 @@ public class GloryPathView extends FrameLayout {
             card.setPadding(dp(10),dp(9),dp(10),dp(9));
             card.setBackground(panel(current?CURRENT:PANEL,current?GOLD_LIGHT:GOLD,current?2:1,12));
             LinearLayout top=new LinearLayout(context); top.setGravity(Gravity.CENTER_VERTICAL);
-            top.addView(makeBadge(i,false),new LinearLayout.LayoutParams(dp(65),dp(65)));
+            top.addView(makeBadge(i,locked),new LinearLayout.LayoutParams(dp(72),dp(72)));
             LinearLayout words=new LinearLayout(context); words.setOrientation(LinearLayout.VERTICAL); words.setPadding(dp(8),0,dp(4),0);
             TextView name=text(leagueName(i),16,true,Gravity.LEFT,color);
             name.setSingleLine(true); name.setEllipsize(android.text.TextUtils.TruncateAt.END);
@@ -125,9 +125,9 @@ public class GloryPathView extends FrameLayout {
     }
 
     private ImageView asset(String name,String description){
-        ImageView v=new ImageView(context); int id=getResources().getIdentifier(name,"drawable",context.getPackageName());
-        if(id!=0)v.setImageResource(id); v.setScaleType(ImageView.ScaleType.FIT_CENTER); v.setContentDescription(description); return v;
+        return UiKit.icon(context,name,description);
     }
+
     private LinearLayout iconLabel(String icon,String value,int color){
         LinearLayout row=new LinearLayout(context); row.setGravity(Gravity.CENTER);
         row.addView(asset(icon,icon.equals("nexora_coin")?tr("Монети","Coins","Münzen","Monedas"):
@@ -135,17 +135,15 @@ public class GloryPathView extends FrameLayout {
                 icon.equals("nexora_cards")?tr("Карти","Cards","Karten","Cartas"):tr("Кубки","Cups","Pokale","Copas")),new LinearLayout.LayoutParams(dp(26),dp(26)));
         row.addView(text(value,12,true,Gravity.CENTER,color)); return row;
     }
+
     private FrameLayout makeBadge(int index,boolean locked){
-        FrameLayout h=new FrameLayout(context); int id=context.getResources().getIdentifier(index<3?"rank_novice":LeagueSystem.assetForIndex(index),"drawable",context.getPackageName());
-        if(id!=0){ ImageView v=new ImageView(context); v.setImageResource(id); v.setScaleType(ImageView.ScaleType.FIT_CENTER); v.setAlpha(locked?.48f:1f); h.addView(v,new FrameLayout.LayoutParams(-1,-1)); }
-        else { h.setBackground(circle(LeagueSystem.familyColorForIndex(index))); h.addView(text("♠",28,true,Gravity.CENTER,LeagueSystem.familyColorForIndex(index)),new FrameLayout.LayoutParams(-1,-1)); }
-        if(index<3){
-            TextView tier=text(LeagueSystem.tierRomanForIndex(index),10,true,Gravity.CENTER,GOLD_LIGHT);
-            tier.setBackground(panel(BG,GOLD,1,5));
-            FrameLayout.LayoutParams tp=new FrameLayout.LayoutParams(dp(30),dp(19),Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL); h.addView(tier,tp);
-        }
+        FrameLayout h=new FrameLayout(context);
+        ImageView v=UiKit.icon(context,LeagueSystem.assetForIndex(index),leagueName(index));
+        v.setAlpha(locked?0.42f:1f);
+        h.addView(v,new FrameLayout.LayoutParams(-1,-1));
         return h;
     }
+
     private TextView text(String s,int z,boolean b,int g,int c){ TextView v=new TextView(context); v.setText(s); v.setTextSize(z); v.setTextColor(c); v.setGravity(g); if(b)v.setTypeface(Typeface.DEFAULT,Typeface.BOLD); v.setPadding(dp(4),0,dp(4),0); return v; }
     private GradientDrawable panel(int fill,int stroke,int width,int radius){ GradientDrawable d=new GradientDrawable(); d.setColor(fill); d.setCornerRadius(dp(radius)); if(width>0)d.setStroke(dp(width),stroke); return d; }
     private GradientDrawable circle(int stroke){ GradientDrawable d=new GradientDrawable(); d.setShape(GradientDrawable.OVAL); d.setColor(Color.rgb(5,18,14)); d.setStroke(dp(2),stroke); return d; }
