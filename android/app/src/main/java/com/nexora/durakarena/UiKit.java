@@ -47,7 +47,10 @@ public final class UiKit {
 
     public static TextView text(Context c, String value, int size, boolean bold, int gravity, int color) {
         TextView v = new TextView(c);
-        v.setText(value);
+        String branded = value == null ? "" : value
+                .replace("DURAK ARENA", "ACE ARENA")
+                .replace("Durak Arena", "Ace Arena");
+        v.setText(branded);
         v.setTextSize(size);
         v.setTextColor(color);
         v.setGravity(gravity);
@@ -55,12 +58,17 @@ public final class UiKit {
         return v;
     }
 
+    /**
+     * V2 never loads the old photo-like PNG button icons. The same resource keys
+     * are kept so existing screen code does not have to change, but the visible
+     * symbol is drawn in code by GameIconDrawable.
+     */
     public static ImageView icon(Context c, String drawableName, String contentDescription) {
         ImageView v = new ImageView(c);
-        int id = c.getResources().getIdentifier(drawableName, "drawable", c.getPackageName());
-        if (id != 0) v.setImageResource(id);
+        v.setImageDrawable(new GameIconDrawable(drawableName));
         v.setScaleType(ImageView.ScaleType.FIT_CENTER);
         v.setContentDescription(contentDescription);
+        v.setPadding(dp(c, 2), dp(c, 2), dp(c, 2), dp(c, 2));
         return v;
     }
 
