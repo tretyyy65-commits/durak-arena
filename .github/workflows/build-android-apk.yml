@@ -1,9 +1,8 @@
 name: Build Durak Arena APK
 
-# Build verification marker: dynamic league/profile sync
 on:
   push:
-    branches: [ main ]
+    branches: [ main, ui-redesign ]
     paths:
       - 'android/**'
       - '.github/workflows/build-android-apk.yml'
@@ -76,7 +75,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: DurakArena
+          name: DurakArena-ui-redesign
           path: DurakArena.apk
           if-no-files-found: error
           retention-days: 30
