@@ -19,14 +19,18 @@ public final class GloryRewards {
     private static SharedPreferences prefs(Context c){return c.getSharedPreferences("durak_arena_profile",Context.MODE_PRIVATE);}
     private static String prefix(SharedPreferences p){return "glory_v1_"+p.getString("firebase_uid","guest")+"_";}
     public static synchronized boolean isClaimed(Context c,int i){SharedPreferences p=prefs(c);return p.getBoolean(prefix(p)+"claimed_"+i,false);}
-    public static synchronized long balance(Context c,String currency){SharedPreferences p=prefs(c);return Math.max(0,p.getLong(prefix(p)+currency,0));}
+    public static synchronized int balance(Context c,String currency){
+        SharedPreferences p=prefs(c);
+        long value=Math.max(0L,p.getLong(prefix(p)+currency,0L));
+        return value>Integer.MAX_VALUE?Integer.MAX_VALUE:(int)value;
+    }
     public static synchronized boolean claim(Context c,int i){
         if(i<0||i>=LeagueSystem.STARTS.length)return false;
         SharedPreferences p=prefs(c); String key=prefix(p);
         if(!eligible(p.getInt("player_cups",0),i)||p.getBoolean(key+"claimed_"+i,false))return false;
         return p.edit().putBoolean(key+"claimed_"+i,true)
-                .putLong(key+"coins",balance(c,"coins")+coins(i))
-                .putLong(key+"crystals",balance(c,"crystals")+crystals(i))
-                .putLong(key+"cards",balance(c,"cards")+cards(i)).commit();
+                .putLong(key+"coins",(long)balance(c,"coins")+coins(i))
+                .putLong(key+"crystals",(long)balance(c,"crystals")+crystals(i))
+                .putLong(key+"cards",(long)balance(c,"cards")+cards(i)).commit();
     }
 }
