@@ -1,171 +1,121 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Durak Arena</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071510" />
+  <title>Durak Arena</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-spade" viewBox="0 0 24 24"><path d="M12 2C9.8 5.8 4.6 8.6 4.6 13.1A4.4 4.4 0 0 0 12 16.3a4.4 4.4 0 0 0 7.4-3.2C19.4 8.6 14.2 5.8 12 2Zm-3 19h6l-1.8-5h-2.4L9 21Z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M12 12a4.6 4.6 0 1 0 0-9.2A4.6 4.6 0 0 0 12 12Zm0 2.3c-4.8 0-8.7 2.4-8.7 5.4V22h17.4v-2.3c0-3-3.9-5.4-8.7-5.4Z"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="m3 6 5 4 4-7 4 7 5-4-2 12H5L3 6Zm3 14h12v2H6v-2Z"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 3h10v3h4v3c0 4-2 6-5 6.8A6 6 0 0 1 13 18v2h4v2H7v-2h4v-2a6 6 0 0 1-3-2.2C5 15 3 13 3 9V6h4V3Zm10 5v5.4c1.3-.7 2-2 2-4V8h-2ZM5 8v1.4c0 2 .7 3.3 2 4V8H5Z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 20 5v6c0 5.4-3.4 9.4-8 11-4.6-1.6-8-5.6-8-11V5l8-3Zm0 4-4 1.4V11c0 3.2 1.6 5.7 4 7 2.4-1.3 4-3.8 4-7V7.4L12 6Z"/></symbol>
+    <symbol id="i-medal" viewBox="0 0 24 24"><path d="m7 2 3 6H7L4 2h3Zm6 6 3-6h4l-3 6h-4Zm-1 1a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 3 1.1 2.2 2.4.4-1.8 1.7.4 2.4-2.1-1.1-2.1 1.1.4-2.4-1.8-1.7 2.4-.4L12 12Z"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M10.8 2h2.4l.6 2.4 2.1.9 2.1-1.3 1.7 1.7-1.3 2.1.9 2.1 2.4.6v2.4l-2.4.6-.9 2.1 1.3 2.1-1.7 1.7-2.1-1.3-2.1.9-.6 2.4h-2.4l-.6-2.4-2.1-.9-2.1 1.3-1.7-1.7 1.3-2.1-.9-2.1-2.4-.6v-2.4l2.4-.6.9-2.1-1.3-2.1L6 4l2.1 1.3 2.1-.9.6-2.4ZM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></symbol>
+    <symbol id="i-cards" viewBox="0 0 24 24"><path d="M5 3h11a2 2 0 0 1 2 2v12H7a2 2 0 0 1-2-2V3Zm5 5 2-2 2 2-2 2-2-2Zm1 5h2v2h-2v-2Zm8-6 2 1v11a2 2 0 0 1-2 2H9v-2h10V7Z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3 6 6.6 1-4.8 4.7 1.1 6.6L12 17.2l-5.9 3.1 1.1-6.6L2.4 9 9 8l3-6Z"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m14.7 5.3-1.4-1.4L5.2 12l8.1 8.1 1.4-1.4L9 13h10v-2H9l5.7-5.7Z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h2v12H5V10h2Zm2 0h6V7a3 3 0 0 0-6 0v3Zm3 4a2 2 0 0 0-1 3.7V20h2v-2.3A2 2 0 0 0 12 14Z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 9-13h-6V2Z"/></symbol>
+  </svg>
 
-<main id="app">
-
-    <!-- ВЕРХНЯ ПАНЕЛЬ -->
-    <header class="top-bar">
-
-        <div class="profile">
-            <div class="avatar">🦊</div>
-
-            <div class="profile-info">
-                <strong>Фокс</strong>
-                <small>#QR12657R</small>
-            </div>
-
-            <div class="league">
-                <span>🏆</span>
-                <div>
-                    <b>ПРОФІ</b>
-                    <small>1250 / 2000</small>
-                </div>
-            </div>
-        </div>
-
-        <div class="currency">
-            <div>
-                🪙 <b>417 666</b>
-                <button>+</button>
-            </div>
-
-            <div>
-                💎 <b>850</b>
-                <button>+</button>
-            </div>
-        </div>
-
-    </header>
-
-
-    <!-- ЦЕНТР -->
-    <section class="hero">
-
-        <div class="game-logo">
-
-            <div class="logo-cards">
-                ♠ ♥ ♣ ♦
-            </div>
-
-            <h1>DURAK</h1>
-            <h2>ARENA</h2>
-
-            <div class="logo-crown">♛</div>
-
-        </div>
-
-
-        <button class="play-button" id="playButton">
-            <span>♠</span>
-            ГРАТИ
-            <span>♦</span>
-        </button>
-
+  <main id="app">
+    <section class="screen loading-screen active" data-screen="loading">
+      <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+      <div class="brand-mark brand-mark-xl"><svg><use href="#i-spade"/></svg></div>
+      <div class="brand-copy"><span>NEXORA INTERACTIVE</span><h1>DURAK <b>ARENA</b></h1><p>Майстерність. Ризик. Слава.</p></div>
+      <div class="load-wrap"><div class="load-track"><span id="loadBar"></span></div><small id="loadText">Підготовка арени… 0%</small></div>
     </section>
 
-
-    <!-- ЛІВЕ МЕНЮ -->
-    <aside class="side-menu">
-
-        <button id="shopButton">
-            <span>🧰</span>
-            <b>МАГАЗИН</b>
-        </button>
-
-        <button id="clanButton">
-            <span>👑</span>
-            <b>КЛАН</b>
-        </button>
-
-        <button id="medalsButton">
-            <span>🏅</span>
-            <b>МЕДАЛІ</b>
-        </button>
-
-    </aside>
-
-
-    <!-- ПРАВЕ МЕНЮ -->
-    <aside class="right-menu">
-
-        <button id="giftButton">
-            <span>🎁</span>
-            <b>ПОДАРУНКИ</b>
-        </button>
-
-        <button id="settingsButton">
-            <span>⚙️</span>
-            <b>НАЛАШТУВАННЯ</b>
-        </button>
-
-    </aside>
-
-
-    <!-- СТАТИСТИКА -->
-    <section class="stats">
-
-        <button id="ratingButton" class="stat-card">
-            <span class="stat-title">РЕЙТИНГ</span>
-            <strong>🏆 1250</strong>
-            <small>ПРОФІ</small>
-        </button>
-
-        <button id="seasonButton" class="stat-card">
-            <span class="stat-title">СЕЗОН</span>
-            <strong>👑 №4</strong>
-            <small>8 д. 17 г.</small>
-        </button>
-
-        <button id="leadersButton" class="stat-card">
-            <span class="stat-title">ЛІДЕРИ</span>
-            <strong>🥇 1</strong>
-            <small>РЕЙТИНГ</small>
-        </button>
-
+    <section class="screen auth-screen" data-screen="auth">
+      <div class="ambient ambient-one"></div>
+      <div class="auth-card glass">
+        <div class="brand-mark"><svg><use href="#i-spade"/></svg></div>
+        <div class="eyebrow">DURAK ARENA</div>
+        <h2>Увійди в арену</h2>
+        <p>Збережи профіль, прогрес і сезонні нагороди.</p>
+        <button class="primary-button" id="googleLogin"><span class="google-g">G</span>Продовжити з Google</button>
+        <button class="ghost-button" id="guestLogin">Увійти як гість</button>
+        <small class="legal">Продовжуючи, ти погоджуєшся з правилами гри.</small>
+      </div>
     </section>
 
+    <section class="screen home-screen" data-screen="home">
+      <header class="topbar">
+        <button class="profile-chip" data-go="profile"><div class="avatar"><svg><use href="#i-user"/></svg></div><div><strong>Фокс</strong><span>#QR12657R</span></div></button>
+        <div class="wallet"><div><span class="coin-dot"></span><b>417 666</b></div><div><span class="gem-dot"></span><b>850</b></div></div>
+      </header>
 
-    <!-- НИЖНЯ НАВІГАЦІЯ -->
-    <nav class="bottom-nav">
+      <div class="home-hero">
+        <div class="rank-emblem"><svg><use href="#i-shield"/></svg><span>ПРОФІ</span></div>
+        <div class="home-title"><span>СЕЗОН 04</span><h2>DURAK <b>ARENA</b></h2><p>Твоя серія: <strong>7 перемог</strong></p></div>
+        <button class="play-cta" data-go="modes"><svg><use href="#i-play"/></svg><span><b>ГРАТИ</b><small>Обрати режим</small></span></button>
+      </div>
 
-        <button class="active" id="homeButton">
-            <span>🏠</span>
-            <b>ГОЛОВНА</b>
-        </button>
+      <section class="feature-grid">
+        <button class="feature-card feature-wide" data-go="glory"><div class="icon-orb gold"><svg><use href="#i-crown"/></svg></div><div><span>ШЛЯХ СЛАВИ</span><strong>1 250 / 2 000</strong><small>До рангу «Майстер»</small></div><em>62%</em></button>
+        <button class="feature-card" data-go="rating"><div class="icon-orb"><svg><use href="#i-trophy"/></svg></div><span>РЕЙТИНГ</span><strong>#128</strong></button>
+        <button class="feature-card" data-go="medals"><div class="icon-orb"><svg><use href="#i-medal"/></svg></div><span>МЕДАЛІ</span><strong>12 / 36</strong></button>
+      </section>
 
-        <button id="gameButton">
-            <span>🃏</span>
-            <b>ГРА</b>
-        </button>
+      <nav class="bottom-nav">
+        <button class="active" data-go="home"><svg><use href="#i-home"/></svg><span>Головна</span></button>
+        <button data-go="modes"><svg><use href="#i-cards"/></svg><span>Гра</span></button>
+        <button data-go="glory"><svg><use href="#i-crown"/></svg><span>Слава</span></button>
+        <button data-go="profile"><svg><use href="#i-user"/></svg><span>Профіль</span></button>
+        <button data-go="settings"><svg><use href="#i-settings"/></svg><span>Налашт.</span></button>
+      </nav>
+    </section>
 
-        <button id="ratingNavButton">
-            <span>⚔️</span>
-            <b>РЕЙТИНГ</b>
-        </button>
+    <section class="screen sub-screen" data-screen="glory">
+      <header class="sub-head"><button class="icon-button" data-go="home"><svg><use href="#i-back"/></svg></button><div><span>ПРОГРЕС СЕЗОНУ</span><h2>Шлях слави</h2></div><div class="season-badge">S04</div></header>
+      <div class="glory-summary glass"><div class="rank-emblem small"><svg><use href="#i-shield"/></svg></div><div><span>Поточний ранг</span><h3>ПРОФІ</h3><p>1 250 кубків</p></div><strong>62%</strong></div>
+      <div class="road">
+        <div class="road-line"></div>
+        <article class="road-step done"><span>800</span><div class="road-node"><svg><use href="#i-star"/></svg></div><div><b>Срібна скриня</b><small>Отримано</small></div></article>
+        <article class="road-step done"><span>1 000</span><div class="road-node"><svg><use href="#i-medal"/></svg></div><div><b>Ранг: Профі</b><small>Досягнуто</small></div></article>
+        <article class="road-step current"><span>1 250</span><div class="road-node"><svg><use href="#i-crown"/></svg></div><div><b>Золота скриня</b><small>Поточна позиція</small></div></article>
+        <article class="road-step locked"><span>1 500</span><div class="road-node"><svg><use href="#i-lock"/></svg></div><div><b>Епічна нагорода</b><small>Ще 250 кубків</small></div></article>
+        <article class="road-step locked"><span>2 000</span><div class="road-node"><svg><use href="#i-shield"/></svg></div><div><b>Ранг: Майстер</b><small>Головна ціль</small></div></article>
+      </div>
+    </section>
 
-        <button id="profileButton">
-            <span>👤</span>
-            <b>ПРОФІЛЬ</b>
-        </button>
+    <section class="screen sub-screen" data-screen="modes">
+      <header class="sub-head"><button class="icon-button" data-go="home"><svg><use href="#i-back"/></svg></button><div><span>ОБЕРИ СТІЛ</span><h2>Режими гри</h2></div><div class="season-badge">LIVE</div></header>
+      <div class="mode-stack">
+        <button class="mode-card featured"><div class="mode-icon"><svg><use href="#i-bolt"/></svg></div><div><span>ШВИДКА ГРА</span><h3>Класичний дурень</h3><p>2–4 гравці · 36 карт · рейтинговий матч</p><div class="mode-tags"><b>+25 XP</b><b>Рейтинг</b></div></div><strong class="arrow">›</strong></button>
+        <button class="mode-card"><div class="mode-icon"><svg><use href="#i-cards"/></svg></div><div><span>ПРИВАТНА КІМНАТА</span><h3>Гра з друзями</h3><p>Створи код кімнати або приєднайся.</p></div><strong class="arrow">›</strong></button>
+        <button class="mode-card locked-card"><div class="mode-icon"><svg><use href="#i-crown"/></svg></div><div><span>ТУРНІР</span><h3>Арена чемпіонів</h3><p>Відкриється у наступному оновленні.</p></div><svg class="lock-mini"><use href="#i-lock"/></svg></button>
+      </div>
+    </section>
 
-        <button id="achievementsButton">
-            <span>🏆</span>
-            <b>ДОСЯГНЕННЯ</b>
-        </button>
+    <section class="screen sub-screen" data-screen="profile">
+      <header class="sub-head"><button class="icon-button" data-go="home"><svg><use href="#i-back"/></svg></button><div><span>ГРАВЕЦЬ</span><h2>Профіль</h2></div><button class="icon-button" data-go="settings"><svg><use href="#i-settings"/></svg></button></header>
+      <div class="profile-hero glass"><div class="profile-avatar"><svg><use href="#i-user"/></svg></div><h3>Фокс</h3><p>#QR12657R · Україна</p><div class="profile-stats"><div><b>1 250</b><span>Кубки</span></div><div><b>64%</b><span>Перемоги</span></div><div><b>7</b><span>Серія</span></div></div></div>
+      <div class="info-list"><div><span>Ранг</span><b>Профі</b></div><div><span>Найкращий сезон</span><b>#84 · S03</b></div><div><span>Матчі</span><b>428</b></div><div><span>Медалі</span><b>12 / 36</b></div></div>
+    </section>
 
-    </nav>
+    <section class="screen sub-screen" data-screen="rating">
+      <header class="sub-head"><button class="icon-button" data-go="home"><svg><use href="#i-back"/></svg></button><div><span>СЕЗОН 04</span><h2>Рейтинг</h2></div><div class="season-badge">TOP</div></header>
+      <div class="leaderboard glass"><div class="leader me"><span>128</span><div class="mini-avatar">F</div><div><b>Фокс</b><small>Профі</small></div><strong>1 250</strong></div><div class="leader"><span>1</span><div class="mini-avatar">A</div><div><b>ARENA_KING</b><small>Легенда</small></div><strong>5 842</strong></div><div class="leader"><span>2</span><div class="mini-avatar">D</div><div><b>DarkAce</b><small>Легенда</small></div><strong>5 613</strong></div></div>
+    </section>
 
-</main>
+    <section class="screen sub-screen" data-screen="medals">
+      <header class="sub-head"><button class="icon-button" data-go="home"><svg><use href="#i-back"/></svg></button><div><span>КОЛЕКЦІЯ</span><h2>Медалі</h2></div><div class="season-badge">12/36</div></header>
+      <div class="medal-grid"><div class="medal-card earned"><svg><use href="#i-medal"/></svg><b>Перша кров</b><small>1 перемога</small></div><div class="medal-card earned"><svg><use href="#i-crown"/></svg><b>Серія</b><small>5 перемог</small></div><div class="medal-card"><svg><use href="#i-lock"/></svg><b>Майстер</b><small>2 000 кубків</small></div><div class="medal-card"><svg><use href="#i-lock"/></svg><b>Легенда</b><small>5 000 кубків</small></div></div>
+    </section>
 
-<script src="script.js"></script>
-
+    <section class="screen sub-screen" data-screen="settings">
+      <header class="sub-head"><button class="icon-button" data-go="home"><svg><use href="#i-back"/></svg></button><div><span>СИСТЕМА</span><h2>Налаштування</h2></div><div></div></header>
+      <div class="settings-list glass"><button><span>Мова</span><b>Українська ›</b></button><button><span>Звук</span><b>Увімкнено ›</b></button><button><span>Регіон</span><b>Україна ›</b></button><button><span>Історія матчів</span><b>›</b></button><button><span>Підтримка</span><b>›</b></button><button><span>Автор гри</span><b>NEXORA ›</b></button></div>
+    </section>
+  </main>
+  <script src="script.js"></script>
 </body>
 </html>
