@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -80,3 +80,18 @@ jobs:
           path: DurakArena.apk
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish V3 APK as GitHub Release asset
+        if: github.ref == 'refs/heads/ui-redesign-v3'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v3-test >/dev/null 2>&1; then
+            gh release upload v3-test DurakArena.apk --clobber
+          else
+            gh release create v3-test DurakArena.apk \
+              --title "Durak Arena V3 Test" \
+              --notes "Latest Durak Arena V3 test APK" \
+              --prerelease \
+              --target "$GITHUB_SHA"
+          fi
