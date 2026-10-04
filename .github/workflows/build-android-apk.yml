@@ -1,9 +1,9 @@
 name: Build Durak Arena APK
 
-# Build verification marker: UI redesign isolated branch
+# Build verification marker: UI redesign isolated branches
 on:
   push:
-    branches: [ main, ui-redesign-v2 ]
+    branches: [ main, ui-redesign-v2, ui-redesign-v3 ]
     paths:
       - 'android/**'
       - '.github/workflows/build-android-apk.yml'
