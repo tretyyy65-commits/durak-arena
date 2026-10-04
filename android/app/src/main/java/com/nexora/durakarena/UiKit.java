@@ -14,14 +14,14 @@ import android.widget.TextView;
 public final class UiKit {
     private UiKit() {}
 
-    public static final int BG = Color.rgb(4, 7, 10);
-    public static final int PANEL = Color.rgb(7, 13, 18);
-    public static final int PANEL_2 = Color.rgb(10, 18, 24);
-    public static final int GOLD = Color.rgb(201, 151, 58);
-    public static final int GOLD_LIGHT = Color.rgb(241, 209, 138);
-    public static final int TEXT = Color.rgb(235, 229, 211);
-    public static final int MUTED = Color.rgb(155, 158, 157);
-    public static final int RED = Color.rgb(118, 18, 20);
+    public static final int BG = Color.rgb(2, 8, 6);
+    public static final int PANEL = Color.rgb(6, 18, 13);
+    public static final int PANEL_2 = Color.rgb(9, 27, 20);
+    public static final int GOLD = Color.rgb(201, 154, 78);
+    public static final int GOLD_LIGHT = Color.rgb(241, 215, 155);
+    public static final int TEXT = Color.rgb(245, 241, 230);
+    public static final int MUTED = Color.rgb(158, 169, 162);
+    public static final int RED = Color.rgb(122, 31, 31);
 
     public static int dp(Context c, int value) {
         return Math.round(value * c.getResources().getDisplayMetrics().density);
@@ -47,10 +47,7 @@ public final class UiKit {
 
     public static TextView text(Context c, String value, int size, boolean bold, int gravity, int color) {
         TextView v = new TextView(c);
-        String branded = value == null ? "" : value
-                .replace("DURAK ARENA", "ACE ARENA")
-                .replace("Durak Arena", "Ace Arena");
-        v.setText(branded);
+        v.setText(value == null ? "" : value);
         v.setTextSize(size);
         v.setTextColor(color);
         v.setGravity(gravity);
@@ -58,11 +55,6 @@ public final class UiKit {
         return v;
     }
 
-    /**
-     * V2 never loads the old photo-like PNG button icons. The same resource keys
-     * are kept so existing screen code does not have to change, but the visible
-     * symbol is drawn in code by GameIconDrawable.
-     */
     public static ImageView icon(Context c, String drawableName, String contentDescription) {
         ImageView v = new ImageView(c);
         v.setImageDrawable(new GameIconDrawable(drawableName));
@@ -79,10 +71,10 @@ public final class UiKit {
         box.setPadding(dp(c, 3), dp(c, 5), dp(c, 3), dp(c, 4));
         box.setBackground(panel(
                 c,
-                active ? Color.rgb(38, 22, 15) : Color.argb(232, 5, 12, 15),
-                active ? GOLD_LIGHT : Color.rgb(100, 76, 42),
+                active ? Color.rgb(14, 42, 30) : Color.argb(238, 4, 14, 10),
+                active ? GOLD_LIGHT : Color.rgb(92, 76, 48),
                 1,
-                8
+                10
         ));
 
         ImageView icon = icon(c, drawableName, title);
@@ -103,31 +95,25 @@ public final class UiKit {
         b.setFocusable(true);
         b.setPadding(dp(c, 10), dp(c, 8), dp(c, 10), dp(c, 8));
         if (primary) {
-            b.setBackground(new GradientDrawable(
+            GradientDrawable bg = new GradientDrawable(
                     GradientDrawable.Orientation.TOP_BOTTOM,
                     new int[]{
-                            Color.rgb(110, 25, 20),
-                            Color.rgb(78, 12, 14),
-                            Color.rgb(34, 9, 10)
+                            Color.rgb(30, 93, 63),
+                            Color.rgb(17, 62, 43),
+                            Color.rgb(7, 31, 22)
                     }
-            ));
-            GradientDrawable bg = (GradientDrawable) b.getBackground();
-            bg.setCornerRadius(dp(c, 16));
+            );
+            bg.setCornerRadius(dp(c, 18));
             bg.setStroke(dp(c, 2), GOLD);
+            b.setBackground(bg);
         } else {
-            b.setBackground(panel(c, Color.rgb(8, 18, 23), GOLD, 1, 10));
+            b.setBackground(panel(c, Color.rgb(5, 19, 14), GOLD, 1, 12));
         }
         return b;
     }
 
     public static int familyOverlay(int cups) {
-        switch (LeagueSystem.familyForIndex(LeagueSystem.indexForCups(cups))) {
-            case 0: return Color.argb(92, 44, 27, 10);
-            case 1: return Color.argb(86, 4, 44, 31);
-            case 2: return Color.argb(82, 5, 28, 55);
-            case 3: return Color.argb(86, 39, 10, 54);
-            default: return Color.argb(92, 66, 6, 10);
-        }
+        return Color.argb(62, 5, 46, 30);
     }
 
     public static String arenaTitleForCups(int cups) {
